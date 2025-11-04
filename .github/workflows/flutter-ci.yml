@@ -31,22 +31,11 @@ jobs:
     - name: Get dependencies
       run: flutter pub get
       
-    - name: Create .env file for tests
-      run: echo "NASA_API_KEY=${{ secrets.NASA_API_KEY }}" > .env
+    - name: Create .env file
+      run: echo "NASA_API_KEY=DEMO_KEY" > .env
       
-    - name: Run unit tests
-      run: flutter test test/unit/ --coverage
-      
-    - name: Run widget tests
-      run: flutter test test/widget/ --coverage
-      
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        files: ./coverage/lcov.info
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+    - name: Run all tests
+      run: flutter test --coverage
         
   build-android:
     name: Build Android APK
@@ -72,6 +61,9 @@ jobs:
         
     - name: Get dependencies
       run: flutter pub get
+      
+    - name: Create .env file
+      run: echo "NASA_API_KEY=DEMO_KEY" > .env
       
     - name: Build APK
       run: flutter build apk --release
