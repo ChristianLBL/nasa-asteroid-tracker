@@ -8,57 +8,47 @@ import 'package:flutter_compass/flutter_compass.dart';
 class SpaceCompassScreen extends StatefulWidget {
   final Asteroid asteroid;
 
-  const SpaceCompassScreen({Key? key, required this.asteroid}) : super(key: key);
+  const SpaceCompassScreen({Key? key, required this.asteroid})
+    : super(key: key);
 
   @override
   State<SpaceCompassScreen> createState() => _SpaceCompassScreenState();
 }
 
 class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
-  // Stream per il sensore della bussola
   StreamSubscription<CompassEvent>? _compassSubscription;
-  
-  // Valori dei sensori
-  double _heading = 0; // Direzione in gradi (0-360)
-  
-  // Posizione simulata dell'asteroide (angoli casuali)
+
+  double _heading = 0;
+  double _lastHeading = 0;
+
   late double _asteroidAzimuth;
-  late double _asteroidElevation;
-  
-  // Distanza simulata dell'asteroide
+
   late double _asteroidDistance;
-  
-  // Stato di calibrazione
+
   bool _isCalibrating = true;
-  bool _isCalibrated = false;
   bool _hasCompass = false;
 
   @override
   void initState() {
     super.initState();
-    
+
     // Verifica se il dispositivo ha una bussola
     FlutterCompass.events?.listen((event) {
       setState(() {
         _hasCompass = true;
       });
     });
-    
-    // Genera una posizione casuale per l'asteroide
+
     final random = math.Random();
     _asteroidAzimuth = random.nextDouble() * 360;
-    _asteroidElevation = random.nextDouble() * 180 - 90; // -90 a 90 gradi
-    
-    // Calcola una distanza simulata basata sulla distanza reale dell'asteroide
+
     if (widget.asteroid.closeApproachData.isNotEmpty) {
       final missDistance = widget.asteroid.closeApproachData.first.missDistance;
-      // Normalizza la distanza per la visualizzazione
       _asteroidDistance = math.min(missDistance / 1000000, 100);
     } else {
-      _asteroidDistance = 50 + random.nextDouble() * 50; // 50-100 unità
+      _asteroidDistance = 50 + random.nextDouble() * 50;
     }
-    
-    // Inizia la calibrazione e poi avvia i sensori
+
     _startCompass();
   }
 
@@ -66,37 +56,42 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
     setState(() {
       _isCalibrating = true;
     });
-    
-    // Avvia il sensore della bussola
+
     _compassSubscription?.cancel();
-    
+
     if (FlutterCompass.events != null) {
-      _compassSubscription = FlutterCompass.events!.listen((CompassEvent event) {
-        // Verifica che i valori siano validi
+      _compassSubscription = FlutterCompass.events!.listen((
+        CompassEvent event,
+      ) {
         if (event.heading != null) {
-          setState(() {
-            _heading = event.heading!;
+          final newHeading = event.heading!;
+          
+          if ((newHeading - _lastHeading).abs() > 1) {
+            _lastHeading = newHeading;
             
-            if (_isCalibrating && event.accuracy != null && event.accuracy! <= 2) {
-              _isCalibrating = false;
-            }
-          });
+            setState(() {
+              _heading = newHeading;
+
+              if (_isCalibrating &&
+                  event.accuracy != null &&
+                  event.accuracy! <= 2) {
+                _isCalibrating = false;
+              }
+            });
+          }
         }
       });
-      
-      // Imposta un timeout per la calibrazione
+
       Future.delayed(const Duration(seconds: 5), () {
         if (_isCalibrating) {
           setState(() {
             _isCalibrating = false;
-            _isCalibrated = true; // Considera calibrata anche se non è perfetta
           });
         }
       });
     } else {
       setState(() {
         _isCalibrating = false;
-        _isCalibrated = false;
         _hasCompass = false;
       });
     }
@@ -113,7 +108,7 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
     final diff = (_asteroidAzimuth - _heading).abs();
     return diff > 180 ? 360 - diff : diff;
   }
-  
+
   // Calcola quanto siamo vicini a puntare all'asteroide
   double _getPointingAccuracy() {
     final dirDiff = _getDirectionDifference();
@@ -136,14 +131,11 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.black,
-        ),
-        child: !_hasCompass 
-            ? _buildNoCompassUI() 
-            : (_isCalibrating 
-                ? _buildCalibrationUI() 
-                : _buildCompassUI()),
+        decoration: const BoxDecoration(color: Colors.black),
+        child:
+            !_hasCompass
+                ? _buildNoCompassUI()
+                : (_isCalibrating ? _buildCalibrationUI() : _buildCompassUI()),
       ),
     );
   }
@@ -214,10 +206,11 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
 
   Widget _buildCompassUI() {
     final accuracy = _getPointingAccuracy();
-    final Color indicatorColor = accuracy > 90 
-        ? Colors.green 
-        : (accuracy > 70 ? Colors.yellow : Colors.red);
-    
+    final Color indicatorColor =
+        accuracy > 90
+            ? Colors.green
+            : (accuracy > 70 ? Colors.yellow : Colors.red);
+
     return Column(
       children: [
         Expanded(
@@ -241,30 +234,22 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
                     ],
                   ),
                 ),
-                
-                // Compass rose - rotates with the device
+
                 Transform.rotate(
                   angle: _safeRadians(-_heading),
                   child: SizedBox(
                     width: 280,
                     height: 280,
-                    child: CustomPaint(
-                      painter: CompassRosePainter(),
-                    ),
+                    child: CustomPaint(painter: CompassRosePainter()),
                   ),
                 ),
-                
-                // Fixed direction indicator (always points north)
-                Container(
-                  width: 4,
-                  height: 20,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(2)),
-                  ),
+
+                const Icon(
+                  Icons.navigation,
+                  color: Colors.red,
+                  size: 40,
                 ),
-                
-                // Asteroid indicator - fixed relative to the world
+
                 Transform.rotate(
                   angle: _safeRadians(_asteroidAzimuth - _heading),
                   child: Transform.translate(
@@ -290,12 +275,13 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
             ),
           ),
         ),
-        
+
         // Asteroid info panel
-        Container(
-          padding: const EdgeInsets.all(20),
-          color: Colors.black.withOpacity(0.8),
-          child: Column(
+        SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            color: Colors.black.withOpacity(0.8),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -336,10 +322,10 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
               const SizedBox(height: 5),
               Center(
                 child: Text(
-                  accuracy > 90 
-                      ? 'Pointing at asteroid!' 
-                      : (accuracy > 70 
-                          ? 'Getting closer...' 
+                  accuracy > 90
+                      ? 'Pointing at asteroid!'
+                      : (accuracy > 70
+                          ? 'Getting closer...'
                           : 'Keep searching...'),
                   style: TextStyle(
                     color: indicatorColor,
@@ -349,6 +335,7 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
               ),
             ],
           ),
+        ),
         ),
       ],
     );
@@ -374,10 +361,7 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
         ),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
         ),
       ],
     );
@@ -390,20 +374,21 @@ class CompassRosePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    
-    final paint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    
+
+    final paint =
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2;
+
     // Disegna il cerchio esterno
     canvas.drawCircle(center, radius - 10, paint);
-    
+
     final textPainter = TextPainter(
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
     );
-    
+
     // Disegna le direzioni cardinali
     final directions = ['N', 'E', 'S', 'W'];
     for (int i = 0; i < 4; i++) {
@@ -412,7 +397,7 @@ class CompassRosePainter extends CustomPainter {
         center.dx + (radius - 40) * math.sin(angle),
         center.dy - (radius - 40) * math.cos(angle),
       );
-      
+
       textPainter.text = TextSpan(
         text: directions[i],
         style: TextStyle(
@@ -421,17 +406,17 @@ class CompassRosePainter extends CustomPainter {
           fontWeight: FontWeight.bold,
         ),
       );
-      
+
       textPainter.layout();
       textPainter.paint(
-        canvas, 
+        canvas,
         Offset(
           offset.dx - textPainter.width / 2,
           offset.dy - textPainter.height / 2,
         ),
       );
     }
-    
+
     // Disegna le direzioni intermedie
     final interDirections = ['NE', 'SE', 'SW', 'NW'];
     for (int i = 0; i < 4; i++) {
@@ -440,7 +425,7 @@ class CompassRosePainter extends CustomPainter {
         center.dx + (radius - 40) * math.sin(angle),
         center.dy - (radius - 40) * math.cos(angle),
       );
-      
+
       textPainter.text = TextSpan(
         text: interDirections[i],
         style: const TextStyle(
@@ -449,57 +434,58 @@ class CompassRosePainter extends CustomPainter {
           fontWeight: FontWeight.bold,
         ),
       );
-      
+
       textPainter.layout();
       textPainter.paint(
-        canvas, 
+        canvas,
         Offset(
           offset.dx - textPainter.width / 2,
           offset.dy - textPainter.height / 2,
         ),
       );
     }
-    
+
     // Disegna i tick marks per i gradi
     for (int i = 0; i < 360; i += 15) {
       final angle = radians(i.toDouble());
-      final outerRadius = i % 90 == 0 ? radius - 15 : (i % 45 == 0 ? radius - 20 : radius - 25);
-      
+      final outerRadius =
+          i % 90 == 0 ? radius - 15 : (i % 45 == 0 ? radius - 20 : radius - 25);
+
       final start = Offset(
         center.dx + (radius - 10) * math.sin(angle),
         center.dy - (radius - 10) * math.cos(angle),
       );
-      
+
       final end = Offset(
         center.dx + outerRadius * math.sin(angle),
         center.dy - outerRadius * math.cos(angle),
       );
-      
+
       canvas.drawLine(
-        start, 
-        end, 
+        start,
+        end,
         Paint()
-          ..color = i % 90 == 0 ? Colors.white : (i % 45 == 0 ? Colors.white70 : Colors.white38)
+          ..color =
+              i % 90 == 0
+                  ? Colors.white
+                  : (i % 45 == 0 ? Colors.white70 : Colors.white38)
           ..strokeWidth = i % 90 == 0 ? 3 : (i % 45 == 0 ? 2 : 1),
       );
-      
+
       if (i % 30 == 0 && i % 90 != 0 && i % 45 != 0) {
         final textOffset = Offset(
           center.dx + (radius - 35) * math.sin(angle),
           center.dy - (radius - 35) * math.cos(angle),
         );
-        
+
         textPainter.text = TextSpan(
           text: '$i°',
-          style: const TextStyle(
-            color: Colors.white54,
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Colors.white54, fontSize: 12),
         );
-        
+
         textPainter.layout();
         textPainter.paint(
-          canvas, 
+          canvas,
           Offset(
             textOffset.dx - textPainter.width / 2,
             textOffset.dy - textPainter.height / 2,
@@ -508,8 +494,7 @@ class CompassRosePainter extends CustomPainter {
       }
     }
   }
-  
+
   @override
   bool shouldRepaint(CompassRosePainter oldDelegate) => false;
 }
-

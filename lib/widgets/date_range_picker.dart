@@ -5,7 +5,7 @@ class DateRangePicker extends StatefulWidget {
   final Function(String, String) onDateRangeSelected;
   final DateTime initialStartDate;
   final DateTime initialEndDate;
-  
+
   const DateRangePicker({
     Key? key,
     required this.onDateRangeSelected,
@@ -163,21 +163,14 @@ class _DateRangePickerState extends State<DateRangePicker> {
             spreadRadius: 1,
           ),
         ],
-        border: Border.all(
-          color: Colors.cyanAccent.withOpacity(0.3),
-          width: 1,
-        ),
+        border: Border.all(color: Colors.cyanAccent.withOpacity(0.3), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Row(
             children: [
-              Icon(
-                Icons.date_range,
-                color: Colors.cyanAccent,
-                size: 20,
-              ),
+              Icon(Icons.date_range, color: Colors.cyanAccent, size: 20),
               SizedBox(width: 10),
               Text(
                 'SELECT DATE RANGE',
@@ -220,11 +213,7 @@ class _DateRangePickerState extends State<DateRangePicker> {
           const SizedBox(height: 15),
           Row(
             children: [
-              const Icon(
-                Icons.info_outline,
-                color: Colors.grey,
-                size: 14,
-              ),
+              const Icon(Icons.info_outline, color: Colors.grey, size: 14),
               const SizedBox(width: 5),
               Text(
                 'Maximum range is 7 days',
@@ -238,7 +227,6 @@ class _DateRangePickerState extends State<DateRangePicker> {
             ],
           ),
           const SizedBox(height: 10),
-          
         ],
       ),
     );

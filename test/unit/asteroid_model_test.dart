@@ -11,23 +11,19 @@ void main() {
         'estimated_diameter': {
           'kilometers': {
             'estimated_diameter_min': 0.134,
-            'estimated_diameter_max': 0.3
-          }
+            'estimated_diameter_max': 0.3,
+          },
         },
         'is_potentially_hazardous_asteroid': true,
         'close_approach_data': [
           {
             'close_approach_date': '2024-01-15',
             'close_approach_date_full': '2024-Jan-15 10:30',
-            'relative_velocity': {
-              'kilometers_per_hour': '54000.5'
-            },
-            'miss_distance': {
-              'kilometers': '7500000.25'
-            },
-            'orbiting_body': 'Earth'
-          }
-        ]
+            'relative_velocity': {'kilometers_per_hour': '54000.5'},
+            'miss_distance': {'kilometers': '7500000.25'},
+            'orbiting_body': 'Earth',
+          },
+        ],
       };
 
       final asteroid = Asteroid.fromJson(json);
@@ -45,13 +41,9 @@ void main() {
       final json = {
         'close_approach_date': '2024-01-15',
         'close_approach_date_full': '2024-Jan-15 10:30',
-        'relative_velocity': {
-          'kilometers_per_hour': '54000.5'
-        },
-        'miss_distance': {
-          'kilometers': '7500000.25'
-        },
-        'orbiting_body': 'Earth'
+        'relative_velocity': {'kilometers_per_hour': '54000.5'},
+        'miss_distance': {'kilometers': '7500000.25'},
+        'orbiting_body': 'Earth',
       };
 
       final closeApproach = CloseApproachData.fromJson(json);
@@ -71,11 +63,11 @@ void main() {
         'estimated_diameter': {
           'kilometers': {
             'estimated_diameter_min': 0.1,
-            'estimated_diameter_max': 0.2
-          }
+            'estimated_diameter_max': 0.2,
+          },
         },
         'is_potentially_hazardous_asteroid': false,
-        'close_approach_data': null
+        'close_approach_data': null,
       };
 
       final asteroid = Asteroid.fromJson(json);

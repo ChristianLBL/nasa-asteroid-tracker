@@ -5,7 +5,7 @@ import '../services/asteroid_service.dart';
 
 class AsteroidProvider with ChangeNotifier {
   final AsteroidService _asteroidService = AsteroidService();
-  
+
   Map<String, List<Asteroid>> _feedAsteroids = {};
   List<Asteroid> _browseAsteroidsList = [];
   Asteroid? _selectedAsteroid;
@@ -25,10 +25,12 @@ class AsteroidProvider with ChangeNotifier {
 
     try {
       final now = DateTime.now();
-      final formattedStartDate = startDate ?? DateFormat('yyyy-MM-dd').format(now);
-      final formattedEndDate = endDate ?? 
+      final formattedStartDate =
+          startDate ?? DateFormat('yyyy-MM-dd').format(now);
+      final formattedEndDate =
+          endDate ??
           DateFormat('yyyy-MM-dd').format(now.add(const Duration(days: 7)));
-      
+
       _feedAsteroids = await _asteroidService.getFeed(
         formattedStartDate,
         formattedEndDate,

@@ -39,34 +39,39 @@ class _SearchScreenState extends State<SearchScreen> {
     Provider.of<AsteroidProvider>(context, listen: false)
         .fetchAsteroid(id)
         .then((_) {
-      setState(() {
-        _isSearching = false;
-      });
-      
-      final provider = Provider.of<AsteroidProvider>(context, listen: false);
-      if (provider.selectedAsteroid != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AsteroidDetailScreen(
-              asteroid: provider.selectedAsteroid!,
+          setState(() {
+            _isSearching = false;
+          });
+
+          final provider = Provider.of<AsteroidProvider>(
+            context,
+            listen: false,
+          );
+          if (provider.selectedAsteroid != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => AsteroidDetailScreen(
+                      asteroid: provider.selectedAsteroid!,
+                    ),
+              ),
+            ).then((_) {
+              provider.clearSelectedAsteroid();
+            });
+          }
+        })
+        .catchError((error) {
+          setState(() {
+            _isSearching = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${error.toString()}'),
+              backgroundColor: Colors.red,
             ),
-          ),
-        ).then((_) {
-          provider.clearSelectedAsteroid();
+          );
         });
-      }
-    }).catchError((error) {
-      setState(() {
-        _isSearching = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${error.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    });
   }
 
   @override
@@ -91,11 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.search,
-                    color: Colors.cyanAccent,
-                    size: 28,
-                  ),
+                  const Icon(Icons.search, color: Colors.cyanAccent, size: 28),
                   const SizedBox(width: 12),
                   const Text(
                     'SEARCH ASTEROID',
@@ -109,10 +110,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: const Icon(
-                      Icons.tune,
-                      color: Colors.cyanAccent,
-                    ),
+                    icon: const Icon(Icons.tune, color: Colors.cyanAccent),
                     onPressed: () {
                       // Azione per le opzioni di ricerca avanzate
                     },
@@ -187,9 +185,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 25),
-              
+
               // Campo di ricerca con stile futuristico
               Container(
                 decoration: BoxDecoration(
@@ -211,10 +209,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   controller: _controller,
                   decoration: InputDecoration(
                     hintText: 'Enter asteroid ID',
-                    hintStyle: TextStyle(
-                      color: Colors.grey[500],
-                      fontSize: 14,
-                    ),
+                    hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
                     filled: true,
                     fillColor: Colors.transparent,
                     border: OutlineInputBorder(
@@ -226,10 +221,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       color: Colors.cyanAccent,
                     ),
                     suffixIcon: IconButton(
-                      icon: const Icon(
-                        Icons.clear,
-                        color: Colors.grey,
-                      ),
+                      icon: const Icon(Icons.clear, color: Colors.grey),
                       onPressed: () => _controller.clear(),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
@@ -237,18 +229,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       horizontal: 20,
                     ),
                   ),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
                   keyboardType: TextInputType.number,
                   onSubmitted: (_) => _searchAsteroid(),
                   cursorColor: Colors.cyanAccent,
                 ),
               ),
-              
+
               const SizedBox(height: 25),
-              
+
               // Pulsante di ricerca con stile futuristico
               SizedBox(
                 width: double.infinity,
@@ -266,35 +255,36 @@ class _SearchScreenState extends State<SearchScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: _isSearching
-                      ? const SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.search, size: 20),
-                            SizedBox(width: 10),
-                            Text(
-                              'SEARCH',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1.5,
-                              ),
+                  child:
+                      _isSearching
+                          ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.black,
+                              strokeWidth: 2,
                             ),
-                          ],
-                        ),
+                          )
+                          : const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.search, size: 20),
+                              SizedBox(width: 10),
+                              Text(
+                                'SEARCH',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.5,
+                                ),
+                              ),
+                            ],
+                          ),
                 ),
               ),
-              
+
               const SizedBox(height: 25),
-              
+
               // Esempi di ID con stile futuristico
               Container(
                 padding: const EdgeInsets.all(15),
@@ -317,10 +307,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     const Expanded(
                       child: Text(
                         'Example IDs: 3542519, 3726710, 2000433',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                     ),
                     IconButton(
@@ -337,7 +324,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              
+
               // Widget di caricamento o errore
               Consumer<AsteroidProvider>(
                 builder: (context, provider, child) {

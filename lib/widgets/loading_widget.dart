@@ -4,7 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class LoadingWidget extends StatelessWidget {
   final String message;
 
-  const LoadingWidget({Key? key, this.message = 'Loading...'}) : super(key: key);
+  const LoadingWidget({Key? key, this.message = 'Loading...'})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,7 @@ class LoadingWidget extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             message,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],
       ),

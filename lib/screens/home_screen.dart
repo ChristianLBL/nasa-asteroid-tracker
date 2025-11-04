@@ -56,9 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             letterSpacing: 1.0,
             fontSize: 12,
           ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 11,
-          ),
+          unselectedLabelStyle: const TextStyle(fontSize: 11),
           type: BottomNavigationBarType.fixed,
           items: [
             _buildNavItem(Icons.public, 'FEED', 0),
@@ -70,7 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
+  BottomNavigationBarItem _buildNavItem(
+    IconData icon,
+    String label,
+    int index,
+  ) {
     return BottomNavigationBarItem(
       icon: Container(
         padding: const EdgeInsets.symmetric(vertical: 5),
@@ -85,11 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: Colors.cyanAccent,
-            ),
+            Icon(icon, size: 24, color: Colors.cyanAccent),
             Positioned(
               bottom: -8,
               child: Container(

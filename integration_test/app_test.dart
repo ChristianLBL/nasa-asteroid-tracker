@@ -12,15 +12,15 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
       expect(find.text('ASTEROID FEED'), findsOneWidget);
-      
+
       await tester.tap(find.text('BROWSE'));
       await tester.pumpAndSettle(const Duration(seconds: 2));
-      
+
       expect(find.text('BROWSE ASTEROIDS'), findsOneWidget);
-      
+
       await tester.tap(find.text('SEARCH'));
       await tester.pumpAndSettle();
-      
+
       expect(find.text('SEARCH ASTEROID'), findsOneWidget);
     });
 
@@ -80,7 +80,7 @@ void main() {
       if (forwardButton.evaluate().isNotEmpty) {
         await tester.tap(forwardButton);
         await tester.pumpAndSettle();
-        
+
         expect(find.text('Page 2'), findsOneWidget);
       }
     });
