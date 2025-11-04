@@ -40,8 +40,7 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
 
     // Genera una posizione casuale per l'asteroide
     final random = math.Random();
-    _asteroidAzimuth = random.nextDouble() * 360;
-    _asteroidElevation = random.nextDouble() * 180 - 90; // -90 a 90 gradi
+    _asteroidAzimuth = random.nextDouble() * 360; // -90 a 90 gradi
 
     // Calcola una distanza simulata basata sulla distanza reale dell'asteroide
     if (widget.asteroid.closeApproachData.isNotEmpty) {
