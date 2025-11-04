@@ -71,10 +71,11 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
         if (event.heading != null) {
           final newHeading = event.heading!;
           
-          if ((newHeading - _lastHeading).abs() > 2) {
+          if ((newHeading - _lastHeading).abs() > 1) {
+            _lastHeading = newHeading;
+            
             setState(() {
               _heading = newHeading;
-              _lastHeading = newHeading;
 
               if (_isCalibrating &&
                   event.accuracy != null &&
