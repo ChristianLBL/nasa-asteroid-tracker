@@ -21,9 +21,7 @@ class Asteroid {
     List<CloseApproachData> closeApproachDataList = [];
     if (json['close_approach_data'] != null) {
       closeApproachDataList = List<CloseApproachData>.from(
-        json['close_approach_data'].map(
-          (x) => CloseApproachData.fromJson(x),
-        ),
+        json['close_approach_data'].map((x) => CloseApproachData.fromJson(x)),
       );
     }
 
@@ -31,12 +29,12 @@ class Asteroid {
       id: json['id'],
       name: json['name'],
       absoluteMagnitude: json['absolute_magnitude_h'].toDouble(),
-      estimatedDiameterMin: json['estimated_diameter']['kilometers']
-              ['estimated_diameter_min']
-          .toDouble(),
-      estimatedDiameterMax: json['estimated_diameter']['kilometers']
-              ['estimated_diameter_max']
-          .toDouble(),
+      estimatedDiameterMin:
+          json['estimated_diameter']['kilometers']['estimated_diameter_min']
+              .toDouble(),
+      estimatedDiameterMax:
+          json['estimated_diameter']['kilometers']['estimated_diameter_max']
+              .toDouble(),
       isPotentiallyHazardous:
           json['is_potentially_hazardous_asteroid'] ?? false,
       closeApproachData: closeApproachDataList,
@@ -64,7 +62,8 @@ class CloseApproachData {
       closeApproachDate: json['close_approach_date'],
       closeApproachDateFull: json['close_approach_date_full'],
       relativeVelocity: double.parse(
-          json['relative_velocity']['kilometers_per_hour']),
+        json['relative_velocity']['kilometers_per_hour'],
+      ),
       missDistance: double.parse(json['miss_distance']['kilometers']),
       orbitingBody: json['orbiting_body'],
     );

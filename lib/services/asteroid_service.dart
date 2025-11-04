@@ -8,24 +8,27 @@ class AsteroidService {
   final String apiKey = dotenv.env['NASA_API_KEY'] ?? 'DEMO_KEY';
 
   Future<Map<String, List<Asteroid>>> getFeed(
-      String startDate, String endDate) async {
+    String startDate,
+    String endDate,
+  ) async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/feed?start_date=$startDate&end_date=$endDate&api_key=$apiKey'),
+        '$baseUrl/feed?start_date=$startDate&end_date=$endDate&api_key=$apiKey',
+      ),
     );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       final Map<String, dynamic> nearEarthObjects = data['near_earth_objects'];
-      
+
       Map<String, List<Asteroid>> result = {};
-      
+
       nearEarthObjects.forEach((date, asteroids) {
         result[date] = List<Asteroid>.from(
           asteroids.map((x) => Asteroid.fromJson(x)),
         );
       });
-      
+
       return result;
     } else {
       throw Exception('Failed to load asteroid feed: ${response.statusCode}');

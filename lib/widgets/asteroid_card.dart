@@ -7,24 +7,20 @@ class AsteroidCard extends StatelessWidget {
   final Asteroid asteroid;
   final VoidCallback onTap;
 
-  const AsteroidCard({
-    Key? key,
-    required this.asteroid,
-    required this.onTap,
-  }) : super(key: key);
+  const AsteroidCard({Key? key, required this.asteroid, required this.onTap})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final closeApproach = asteroid.closeApproachData.isNotEmpty
-        ? asteroid.closeApproachData.first
-        : null;
+    final closeApproach =
+        asteroid.closeApproachData.isNotEmpty
+            ? asteroid.closeApproachData.first
+            : null;
 
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
@@ -33,9 +29,10 @@ class AsteroidCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             gradient: LinearGradient(
-              colors: asteroid.isPotentiallyHazardous
-                  ? [Colors.red.shade900, Colors.red.shade700]
-                  : [Colors.blue.shade900, Colors.blue.shade700],
+              colors:
+                  asteroid.isPotentiallyHazardous
+                      ? [Colors.red.shade900, Colors.red.shade700]
+                      : [Colors.blue.shade900, Colors.blue.shade700],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -60,7 +57,9 @@ class AsteroidCard extends StatelessWidget {
                   if (asteroid.isPotentiallyHazardous)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(12),
@@ -90,8 +89,11 @@ class AsteroidCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today,
-                        color: Colors.white70, size: 16),
+                    const Icon(
+                      Icons.calendar_today,
+                      color: Colors.white70,
+                      size: 16,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Approach: ${date_util.DateUtils.formatDate(closeApproach.closeApproachDate)}',
@@ -113,8 +115,11 @@ class AsteroidCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.social_distance,
-                        color: Colors.white70, size: 16),
+                    const Icon(
+                      Icons.social_distance,
+                      color: Colors.white70,
+                      size: 16,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Miss Distance: ${NumberFormatter.formatDistance(closeApproach.missDistance)} km',
@@ -139,4 +144,3 @@ class AsteroidCard extends StatelessWidget {
     );
   }
 }
-

@@ -26,7 +26,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
   }
 
   void _loadAsteroids() {
-    Provider.of<AsteroidProvider>(context, listen: false).fetchBrowseAsteroids();
+    Provider.of<AsteroidProvider>(
+      context,
+      listen: false,
+    ).fetchBrowseAsteroids();
   }
 
   void _nextPage(int totalItems) {
@@ -67,11 +70,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.explore,
-                    color: Colors.cyanAccent,
-                    size: 28,
-                  ),
+                  const Icon(Icons.explore, color: Colors.cyanAccent, size: 28),
                   const SizedBox(width: 12),
                   const Text(
                     'BROWSE ASTEROIDS',
@@ -135,7 +134,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AsteroidDetailScreen(asteroid: asteroid),
+                              builder:
+                                  (context) =>
+                                      AsteroidDetailScreen(asteroid: asteroid),
                             ),
                           );
                         },
@@ -149,7 +150,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.cyanAccent),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.cyanAccent,
+                        ),
                         onPressed: _currentPage > 0 ? _previousPage : null,
                       ),
                       Text(
@@ -157,10 +161,15 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         style: const TextStyle(color: Colors.white),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.arrow_forward, color: Colors.cyanAccent),
-                        onPressed: (_currentPage + 1) * _itemsPerPage < asteroids.length
-                            ? () => _nextPage(asteroids.length)
-                            : null,
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.cyanAccent,
+                        ),
+                        onPressed:
+                            (_currentPage + 1) * _itemsPerPage <
+                                    asteroids.length
+                                ? () => _nextPage(asteroids.length)
+                                : null,
                       ),
                     ],
                   ),

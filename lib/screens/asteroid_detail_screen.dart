@@ -7,7 +7,7 @@ import 'space_compass_screen.dart'; // Nuovo import per la bussola spaziale
 class AsteroidDetailScreen extends StatelessWidget {
   final Asteroid asteroid;
   const AsteroidDetailScreen({Key? key, required this.asteroid})
-      : super(key: key);
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +49,10 @@ class AsteroidDetailScreen extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: asteroid.isPotentiallyHazardous 
-            ? Colors.red.shade700 
-            : Colors.blue.shade700,
+        backgroundColor:
+            asteroid.isPotentiallyHazardous
+                ? Colors.red.shade700
+                : Colors.blue.shade700,
         child: const Icon(Icons.explore),
         tooltip: 'Space Compass',
       ),
@@ -63,9 +64,10 @@ class AsteroidDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: asteroid.isPotentiallyHazardous
-              ? [Colors.red.shade900, Colors.red.shade700]
-              : [Colors.blue.shade900, Colors.blue.shade700],
+          colors:
+              asteroid.isPotentiallyHazardous
+                  ? [Colors.red.shade900, Colors.red.shade700]
+                  : [Colors.blue.shade900, Colors.blue.shade700],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -89,8 +91,10 @@ class AsteroidDetailScreen extends StatelessWidget {
               ),
               if (asteroid.isPotentiallyHazardous)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.red,
                     borderRadius: BorderRadius.circular(20),
@@ -153,9 +157,8 @@ class AsteroidDetailScreen extends StatelessWidget {
             'Hazardous',
             asteroid.isPotentiallyHazardous ? 'Yes' : 'No',
             Icons.warning,
-            valueColor: asteroid.isPotentiallyHazardous
-                ? Colors.red
-                : Colors.green,
+            valueColor:
+                asteroid.isPotentiallyHazardous ? Colors.red : Colors.green,
           ),
         ],
       ),
@@ -250,10 +253,7 @@ class AsteroidDetailScreen extends StatelessWidget {
           Icon(icon, color: Colors.grey, size: 20),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(color: Colors.grey),
-            ),
+            child: Text(label, style: const TextStyle(color: Colors.grey)),
           ),
           Text(
             value,
