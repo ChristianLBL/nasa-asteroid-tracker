@@ -39,20 +39,16 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
       });
     });
 
-    // Genera una posizione casuale per l'asteroide
     final random = math.Random();
-    _asteroidAzimuth = random.nextDouble() * 360; // -90 a 90 gradi
+    _asteroidAzimuth = random.nextDouble() * 360;
 
-    // Calcola una distanza simulata basata sulla distanza reale dell'asteroide
     if (widget.asteroid.closeApproachData.isNotEmpty) {
       final missDistance = widget.asteroid.closeApproachData.first.missDistance;
-      // Normalizza la distanza per la visualizzazione
       _asteroidDistance = math.min(missDistance / 1000000, 100);
     } else {
-      _asteroidDistance = 50 + random.nextDouble() * 50; // 50-100 unità
+      _asteroidDistance = 50 + random.nextDouble() * 50;
     }
 
-    // Inizia la calibrazione e poi avvia i sensori
     _startCompass();
   }
 
@@ -61,7 +57,6 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
       _isCalibrating = true;
     });
 
-    // Avvia il sensore della bussola
     _compassSubscription?.cancel();
 
     if (FlutterCompass.events != null) {
