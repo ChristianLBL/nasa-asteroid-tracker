@@ -240,7 +240,6 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
                   ),
                 ),
 
-                // Compass rose - rotates with the device
                 Transform.rotate(
                   angle: _safeRadians(-_heading),
                   child: SizedBox(
@@ -256,7 +255,6 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
                   size: 40,
                 ),
 
-                // Asteroid indicator - fixed relative to the world
                 Transform.rotate(
                   angle: _safeRadians(_asteroidAzimuth - _heading),
                   child: Transform.translate(
