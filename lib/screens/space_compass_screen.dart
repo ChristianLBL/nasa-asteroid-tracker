@@ -250,10 +250,13 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
                   ),
                 ),
 
-                const Icon(
-                  Icons.navigation,
-                  color: Colors.red,
-                  size: 40,
+                Transform.rotate(
+                  angle: _safeRadians(-_heading),
+                  child: const Icon(
+                    Icons.navigation,
+                    color: Colors.red,
+                    size: 40,
+                  ),
                 ),
 
                 // Asteroid indicator - fixed relative to the world
