@@ -16,22 +16,15 @@ class SpaceCompassScreen extends StatefulWidget {
 }
 
 class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
-  // Stream per il sensore della bussola
   StreamSubscription<CompassEvent>? _compassSubscription;
 
-  // Valori dei sensori
-  double _heading = 0; // Direzione in gradi (0-360)
+  double _heading = 0;
 
-  // Posizione simulata dell'asteroide (angoli casuali)
   late double _asteroidAzimuth;
-  late double _asteroidElevation;
 
-  // Distanza simulata dell'asteroide
   late double _asteroidDistance;
 
-  // Stato di calibrazione
   bool _isCalibrating = true;
-  bool _isCalibrated = false;
   bool _hasCompass = false;
 
   @override
