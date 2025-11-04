@@ -249,14 +249,10 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
                   ),
                 ),
 
-                // Fixed direction indicator (always points north)
-                Container(
-                  width: 4,
-                  height: 20,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(2)),
-                  ),
+                const Icon(
+                  Icons.navigation,
+                  color: Colors.red,
+                  size: 40,
                 ),
 
                 // Asteroid indicator - fixed relative to the world
@@ -287,10 +283,11 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
         ),
 
         // Asteroid info panel
-        Container(
-          padding: const EdgeInsets.all(20),
-          color: Colors.black.withOpacity(0.8),
-          child: Column(
+        SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            color: Colors.black.withOpacity(0.8),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -344,6 +341,7 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
               ),
             ],
           ),
+        ),
         ),
       ],
     );
