@@ -1,0 +1,116 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Verify formatting
+      run: dart format --output=none --set-exit-if-changed .
+      
+    - name: Analyze project
+      run: flutter analyze
+      
+    - name: Run unit tests
+      run: flutter test test/unit/ --coverage
+      
+    - name: Run widget tests
+      run: flutter test test/widget/ --coverage
+      
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        
+  build-android:
+    name: Build Android APK
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Build APK
+      run: flutter build apk --release
+      
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 30
+        
+  build-ios:
+    name: Build iOS (macOS only)
+    needs: test
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.0'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Build iOS (no codesign)
+      run: flutter build ios --release --no-codesign
+      
+    - name: Upload iOS build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-ios
+        path: build/ios/iphoneos/Runner.app
+        retention-days: 30

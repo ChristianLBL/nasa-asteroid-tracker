@@ -1,3 +1,9 @@
+# Documentation (excluded from Git)
+README.md
+TEST_GUIDE.md
+CI_CD_GUIDE.md
+GITHUB_SETUP.md
+
 # Miscellaneous
 *.class
 *.log
