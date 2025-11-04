@@ -19,6 +19,7 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
   StreamSubscription<CompassEvent>? _compassSubscription;
 
   double _heading = 0;
+  double _lastHeading = 0;
 
   late double _asteroidAzimuth;
 
@@ -67,17 +68,21 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
       _compassSubscription = FlutterCompass.events!.listen((
         CompassEvent event,
       ) {
-        // Verifica che i valori siano validi
         if (event.heading != null) {
-          setState(() {
-            _heading = event.heading!;
+          final newHeading = event.heading!;
+          
+          if ((newHeading - _lastHeading).abs() > 2) {
+            setState(() {
+              _heading = newHeading;
+              _lastHeading = newHeading;
 
-            if (_isCalibrating &&
-                event.accuracy != null &&
-                event.accuracy! <= 2) {
-              _isCalibrating = false;
-            }
-          });
+              if (_isCalibrating &&
+                  event.accuracy != null &&
+                  event.accuracy! <= 2) {
+                _isCalibrating = false;
+              }
+            });
+          }
         }
       });
 
