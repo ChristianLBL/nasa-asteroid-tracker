@@ -31,6 +31,9 @@ jobs:
     - name: Get dependencies
       run: flutter pub get
       
+    - name: Create .env file for tests
+      run: echo "NASA_API_KEY=DEMO_KEY" > .env
+      
     - name: Run unit tests
       run: flutter test test/unit/ --coverage
       
