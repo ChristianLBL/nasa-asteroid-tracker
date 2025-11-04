@@ -81,19 +81,16 @@ class _SpaceCompassScreenState extends State<SpaceCompassScreen> {
         }
       });
 
-      // Imposta un timeout per la calibrazione
       Future.delayed(const Duration(seconds: 5), () {
         if (_isCalibrating) {
           setState(() {
             _isCalibrating = false;
-            _isCalibrated = true; // Considera calibrata anche se non è perfetta
           });
         }
       });
     } else {
       setState(() {
         _isCalibrating = false;
-        _isCalibrated = false;
         _hasCompass = false;
       });
     }
